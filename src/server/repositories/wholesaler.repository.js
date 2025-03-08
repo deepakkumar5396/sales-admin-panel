@@ -1,33 +1,58 @@
-const { Wholesaler, Retailer } = require('../models');
+const { Wholesaler, Retailer } = require('../../db/config/db.config');
 
-// Repository to fetch wholesaler with associated retailers
-const getWholesalerWithRetailers = async (wholesaler_id) => {
-  return await Wholesaler.findOne({
-    where: { id: wholesaler_id },
-    include: {
-      model: Retailer,
-      through: { attributes: [] }, // Don't include the junction table attributes
-      as: 'retailers',
-    },
-  });
-};
+class WholesalerRepository {
+    async createWholesaler(wholesalerData) {
+        return await Wholesaler.create(wholesalerData);
+    }
 
-// Repository to fetch retailer with a single wholesaler
-const getRetailerWithSingleWholesaler = async (retailer_id, wholesaler_id) => {
-  return await Retailer.findOne({
-    where: { id: retailer_id },
-    include: {
-      model: Wholesaler,
-      through: { attributes: [] }, // Don't include the junction table attributes
-      as: 'wholesalers',
-      where: {
-        id: wholesaler_id,
-      },
-    },
-  });
-};
+    async getWholesalerWithRetailers(wholesalerId) {
+        return await Wholesaler.findByPk(wholesalerId, {
+            include: [{
+                model: Retailer,
+                as: 'Retailers'
+            }]
+        });
+    }
 
-module.exports = {
-  getWholesalerWithRetailers,
-  getRetailerWithSingleWholesaler,
-};
+    async getMonthlyTurnover() {
+        return await Wholesaler.findAll({
+            attributes: [
+                'id', 'name',
+                [sequelize.fn('sum', sequelize.col('Stock.amount')), 'totalTurnover']
+            ],
+            include: [{
+                model: Stock,
+                as: 'Stocks'
+            }],
+            group: ['Wholesaler.id']
+        });
+    }
+
+    async getMaxTurnover() {
+        return await Wholesaler.findAll({
+            attributes: [
+                'id', 'name',
+                [sequelize.fn('max', sequelize.col('Stock.amount')), 'maxTurnover']
+            ],
+            include: [{
+                model: Stock,
+                as: 'Stocks'
+            }],
+            group: ['Wholesaler.id']
+        });
+    }
+
+    async updateWholesaler(wholesalerId, wholesalerData) {
+        return await Wholesaler.update(wholesalerData, {
+            where: { id: wholesalerId }
+        });
+    }
+
+    async deleteWholesaler(wholesalerId) {
+        return await Wholesaler.destroy({
+            where: { id: wholesalerId }
+        });
+    }
+}
+
+module.exports = new WholesalerRepository();

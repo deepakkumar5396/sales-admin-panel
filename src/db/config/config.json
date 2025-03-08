@@ -9,7 +9,7 @@
     "migrations": ["src/db/migrations/*.js"],
     "seeders": ["src/db/seeders/*.js"],
     "models": ["src/models/*.js"],
-    "logging": false
+    "logging": false 
   },
   "test": {
     "username": "postgres",

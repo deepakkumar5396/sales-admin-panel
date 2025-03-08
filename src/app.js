@@ -1,23 +1,41 @@
-// app.js
-
 const express = require('express');
-const morgan = require('morgan');  // HTTP request logger middleware
-const cors = require('cors');  // Cross-origin resource sharing (CORS) middleware
-const router = require('./server/routes');
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const db = require('./server/models');
 
+// Import Routes
+const retailerRoutes = require('./server/routes/retailer.routes');
+const wholesalerRoutes = require('./server/routes/wholesaler.routes');
+const stockRoutes = require('./server/routes/stock.routes');
+
+// Initialize dotenv
+dotenv.config();
+
+// Initialize express app
 const app = express();
 
 // Middleware
-app.use(morgan('dev'));  // Logging middleware
-app.use(cors());  // Enabling cross-origin requests
-app.use(express.json());  // Middleware to parse incoming JSON requests
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Use the routes
-app.use('/api', router);  // Prefix all API routes with '/api'
+// Sync database
+db.sequelize.sync({ force: false })  // `force: false` to avoid dropping tables
+  .then(() => {
+    console.log('Database connected successfully');
+  })
+  .catch((err) => {
+    console.error('Error:', err);
+  });
 
-// Default route (Optional)
+// Routes
+app.use('/api/retailers', retailerRoutes);
+app.use('/api/wholesalers', wholesalerRoutes);
+app.use('/api/stock', stockRoutes);
+
+// Default Route
 app.get('/', (req, res) => {
-  res.send('Welcome to the Sales Admin Panel!');
+  res.send('Welcome to Sales Admin Panel API!');
 });
 
+// Export app for use in server.js
 module.exports = app;

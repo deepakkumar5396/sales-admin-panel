@@ -1,22 +1,25 @@
 const stockRepository = require('../repositories/stock.repository');
 
-// Service for fetching total monthly turnover
-const getTotalMonthlyTurnover = async () => {
-  return await stockRepository.getTotalMonthlyTurnover();
-};
+class StockService {
+    async createStock(stockData) {
+        return await stockRepository.createStock(stockData);
+    }
 
-// Service for fetching max turnover from a single retailer
-const getMaxTurnoverFromRetailer = async () => {
-  return await stockRepository.getMaxTurnoverFromRetailer();
-};
+    async getAllStocks() {
+        return await stockRepository.getAllStocks();
+    }
 
-// Service to save stock data
-const saveStockData = async (retailer_id, wholesaler_id, stock_amount, date) => {
-  return await stockRepository.saveStockData(retailer_id, wholesaler_id, stock_amount, date);
-};
+    async getStockById(stockId) {
+        return await stockRepository.getStockById(stockId);
+    }
 
-module.exports = {
-  getTotalMonthlyTurnover,
-  getMaxTurnoverFromRetailer,
-  saveStockData,
-};
+    async updateStock(stockId, stockData) {
+        return await stockRepository.updateStock(stockId, stockData);
+    }
+
+    async deleteStock(stockId) {
+        return await stockRepository.deleteStock(stockId);
+    }
+}
+
+module.exports = new StockService();

@@ -1,16 +1,25 @@
 const retailerRepository = require('../repositories/retailer.repository');
 
-// Service to fetch retailer with a single wholesaler
-const getRetailerWithSingleWholesaler = async (retailer_id, wholesaler_id) => {
-  return await retailerRepository.getRetailerWithSingleWholesaler(retailer_id, wholesaler_id);
-};
+class RetailerService {
+    async createRetailer(retailerData) {
+        return await retailerRepository.createRetailer(retailerData);
+    }
 
-// Service to fetch all retailers
-const getAllRetailers = async () => {
-  return await retailerRepository.getAllRetailers();
-};
+    async getAllRetailers() {
+        return await retailerRepository.getAllRetailers();
+    }
 
-module.exports = {
-  getRetailerWithSingleWholesaler,
-  getAllRetailers,
-};
+    async getRetailerById(retailerId) {
+        return await retailerRepository.getRetailerById(retailerId);
+    }
+
+    async updateRetailer(retailerId, retailerData) {
+        return await retailerRepository.updateRetailer(retailerId, retailerData);
+    }
+
+    async deleteRetailer(retailerId) {
+        return await retailerRepository.deleteRetailer(retailerId);
+    }
+}
+
+module.exports = new RetailerService();

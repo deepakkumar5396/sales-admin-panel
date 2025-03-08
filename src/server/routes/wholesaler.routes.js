@@ -3,16 +3,22 @@ const WholesalerController = require('../controllers/wholesaler.controller');
 
 const router = express.Router();
 
-// API 1: Get Wholesaler along with list of Retailers associated
+// Create a new wholesaler
+router.post('/', WholesalerController.createWholesaler);
+
+// Get a wholesaler along with list of retailers
 router.get('/:wholesaler_id', WholesalerController.getWholesalerWithRetailers);
 
-// API 3: Total monthly turnover of each wholesaler for a complete year
+// Get total monthly turnover for all wholesalers
 router.get('/monthly-turnover', WholesalerController.getMonthlyTurnover);
 
-// API 4: Max turnover of each wholesaler from a single retailer
+// Get maximum turnover of each wholesaler from a single retailer
 router.get('/max-turnover', WholesalerController.getMaxTurnover);
 
-// Create a new Wholesaler
-router.post('/', WholesalerController.createWholesaler);
+// Update a wholesaler
+router.put('/:wholesaler_id', WholesalerController.updateWholesaler);
+
+// Delete a wholesaler
+router.delete('/:wholesaler_id', WholesalerController.deleteWholesaler);
 
 module.exports = router;

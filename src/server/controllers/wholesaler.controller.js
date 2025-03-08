@@ -1,58 +1,64 @@
 const wholesalerService = require('../services/wholesaler.service');
 
-// Controller for fetching wholesaler with associated retailers
-const getWholesalerWithRetailers = async (req, res) => {
-  try {
-    const wholesaler = await wholesalerService.getWholesalerWithRetailers(req.params.wholesaler_id);
-    if (!wholesaler) {
-      return res.status(404).json({ message: 'Wholesaler not found' });
+class WholesalerController {
+    async createWholesaler(req, res, next) {
+        try {
+            const wholesalerData = req.body;
+            const wholesaler = await wholesalerService.createWholesaler(wholesalerData);
+            res.status(201).json(wholesaler);
+        } catch (error) {
+            next(error);
+        }
     }
-    return res.json(wholesaler);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-};
 
-// Controller for fetching retailer with a single wholesaler
-const getRetailerWithSingleWholesaler = async (req, res) => {
-  try {
-    const retailer = await wholesalerService.getRetailerWithSingleWholesaler(req.params.retailer_id, req.params.wholesaler_id);
-    if (!retailer) {
-      return res.status(404).json({ message: 'Retailer not found for the given wholesaler' });
+    async getWholesalerWithRetailers(req, res, next) {
+        try {
+            const { wholesaler_id } = req.params;
+            const wholesaler = await wholesalerService.getWholesalerWithRetailers(wholesaler_id);
+            res.status(200).json(wholesaler);
+        } catch (error) {
+            next(error);
+        }
     }
-    return res.json(retailer);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-};
 
-// Controller for total monthly turnover of each wholesaler for the year
-const getTotalMonthlyTurnover = async (req, res) => {
-  try {
-    const turnoverData = await wholesalerService.getTotalMonthlyTurnover();
-    return res.json(turnoverData);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-};
+    async getMonthlyTurnover(req, res, next) {
+        try {
+            const turnover = await wholesalerService.getMonthlyTurnover();
+            res.status(200).json(turnover);
+        } catch (error) {
+            next(error);
+        }
+    }
 
-// Controller for max turnover from a single retailer
-const getMaxTurnoverFromRetailer = async (req, res) => {
-  try {
-    const maxTurnoverData = await wholesalerService.getMaxTurnoverFromRetailer();
-    return res.json(maxTurnoverData);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-};
+    async getMaxTurnover(req, res, next) {
+        try {
+            const maxTurnover = await wholesalerService.getMaxTurnover();
+            res.status(200).json(maxTurnover);
+        } catch (error) {
+            next(error);
+        }
+    }
 
-module.exports = {
-  getWholesalerWithRetailers,
-  getRetailerWithSingleWholesaler,
-  getTotalMonthlyTurnover,
-  getMaxTurnoverFromRetailer,
-};
+    async updateWholesaler(req, res, next) {
+        try {
+            const { wholesaler_id } = req.params;
+            const wholesalerData = req.body;
+            const updatedWholesaler = await wholesalerService.updateWholesaler(wholesaler_id, wholesalerData);
+            res.status(200).json(updatedWholesaler);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteWholesaler(req, res, next) {
+        try {
+            const { wholesaler_id } = req.params;
+            await wholesalerService.deleteWholesaler(wholesaler_id);
+            res.status(204).send();
+        } catch (error) {
+            next(error);
+        }
+    }
+}
+
+module.exports = new WholesalerController();

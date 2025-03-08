@@ -1,29 +1,29 @@
 const wholesalerRepository = require('../repositories/wholesaler.repository');
-const stockRepository = require('../repositories/stock.repository');
 
-// Service for fetching wholesaler with associated retailers
-const getWholesalerWithRetailers = async (wholesaler_id) => {
-  return await wholesalerRepository.getWholesalerWithRetailers(wholesaler_id);
-};
+class WholesalerService {
+    async createWholesaler(wholesalerData) {
+        return await wholesalerRepository.createWholesaler(wholesalerData);
+    }
 
-// Service for fetching retailer with a single wholesaler
-const getRetailerWithSingleWholesaler = async (retailer_id, wholesaler_id) => {
-  return await wholesalerRepository.getRetailerWithSingleWholesaler(retailer_id, wholesaler_id);
-};
+    async getWholesalerWithRetailers(wholesalerId) {
+        return await wholesalerRepository.getWholesalerWithRetailers(wholesalerId);
+    }
 
-// Service for fetching total monthly turnover of each wholesaler
-const getTotalMonthlyTurnover = async () => {
-  return await stockRepository.getTotalMonthlyTurnover();
-};
+    async getMonthlyTurnover() {
+        return await wholesalerRepository.getMonthlyTurnover();
+    }
 
-// Service for fetching max turnover from a single retailer
-const getMaxTurnoverFromRetailer = async () => {
-  return await stockRepository.getMaxTurnoverFromRetailer();
-};
+    async getMaxTurnover() {
+        return await wholesalerRepository.getMaxTurnover();
+    }
 
-module.exports = {
-  getWholesalerWithRetailers,
-  getRetailerWithSingleWholesaler,
-  getTotalMonthlyTurnover,
-  getMaxTurnoverFromRetailer,
-};
+    async updateWholesaler(wholesalerId, wholesalerData) {
+        return await wholesalerRepository.updateWholesaler(wholesalerId, wholesalerData);
+    }
+
+    async deleteWholesaler(wholesalerId) {
+        return await wholesalerRepository.deleteWholesaler(wholesalerId);
+    }
+}
+
+module.exports = new WholesalerService();

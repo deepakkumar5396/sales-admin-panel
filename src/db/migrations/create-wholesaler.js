@@ -1,21 +1,19 @@
+'use strict';
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('wholesalers', {
       id: {
         type: Sequelize.UUID,
+        allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      mobile_number: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
+      // Add other fields as required
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
