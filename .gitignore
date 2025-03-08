@@ -1,0 +1,41 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+
+# Sequelize files
+/sequelize-data/
+
+# Build output
+/dist
+/build
+/public
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+
+# Dependency directories
+npm-debug.log*
+
+# coverage folder for Jest tests
+/coverage
+
+# test output
+/test-output
+
+# OS generated files
+ehthumbs.db
+Icon?

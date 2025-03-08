@@ -1,0 +1,38 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "password",
+    "database": "wholesaler",
+    "host": "localhost",
+    "dialect": "postgres",
+    "migrationStorageTableName": "sequelize_meta",
+    "migrations": ["src/db/migrations/*.js"],
+    "seeders": ["src/db/seeders/*.js"],
+    "models": ["src/models/*.js"],
+    "logging": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": "password",
+    "database": "wholesaler_test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "migrationStorageTableName": "sequelize_meta",
+    "migrations": ["src/db/migrations/*.js"],
+    "seeders": ["src/db/seeders/*.js"],
+    "models": ["src/models/*.js"],
+    "logging": false
+  },
+  "production": {
+    "username": "postgres",
+    "password": "password",
+    "database": "wholesaler",
+    "host": "localhost",
+    "dialect": "postgres",
+    "migrationStorageTableName": "sequelize_meta",
+    "migrations": ["src/db/migrations/*.js"],
+    "seeders": ["src/db/seeders/*.js"],
+    "models": ["src/models/*.js"],
+    "logging": false
+  }
+}
