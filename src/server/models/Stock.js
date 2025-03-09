@@ -1,25 +1,44 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes } = require("sequelize");
 
 class Stock extends Model {
   static associate(models) {
-    this.belongsTo(models.Retailer, {
-      foreignKey: 'retailer_id',
-    });
+    // Stock belongs to Wholesaler
     this.belongsTo(models.Wholesaler, {
-      foreignKey: 'wholesaler_id',
+      foreignKey: "wholesaler_id",
     });
-  }
 
-  static initModel(sequelize) {
-    Stock.init({
-      productName: DataTypes.STRING,
-      price: DataTypes.FLOAT,
-    }, {
-      sequelize,
-      modelName: 'Stock',
-      
+    // Stock belongs to Retailer
+    this.belongsTo(models.Retailer, {
+      foreignKey: "retailer_id",
     });
   }
 }
 
-module.exports = Stock;
+module.exports = (sequelize) => {
+  Stock.init(
+    {
+      wholesaler_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      retailer_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      stock_amount: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Stock",
+      timestamps: true,
+    }
+  );
+  return Stock;
+};

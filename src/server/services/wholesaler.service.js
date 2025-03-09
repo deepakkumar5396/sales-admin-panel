@@ -1,7 +1,9 @@
 const wholesalerRepository = require('../repositories/wholesaler.repository');
 
 class WholesalerService {
+
     async createWholesaler(wholesalerData) {
+        console.log("wholesale",wholesalerData);
         return await wholesalerRepository.createWholesaler(wholesalerData);
     }
 

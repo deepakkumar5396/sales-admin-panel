@@ -2,21 +2,30 @@ const { Model, DataTypes } = require('sequelize');
 
 class Retailer extends Model {
   static associate(models) {
-    this.belongsTo(models.Wholesaler, {
-      foreignKey: 'wholesaler_id',
-    });
-  }
-
-  static initModel(sequelize) {
-    Retailer.init({
-      name: DataTypes.STRING,
-      email: DataTypes.STRING,
-    }, {
-      sequelize, // <-- Pass Sequelize instance here
-      modelName: 'Retailer',
-      timestamps: true,
+    // Many-to-Many relationship with Wholesalers through Stock table
+    this.belongsToMany(models.Wholesaler, {
+      through: models.Stock,
+      foreignKey: 'retailer_id',
+      otherKey: 'wholesaler_id'
     });
   }
 }
 
-module.exports = Retailer;
+module.exports = (sequelize) => {
+  Retailer.init({
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    mobile_number: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    }
+  }, {
+    sequelize,
+    modelName: 'Retailer',
+    timestamps: true
+  });
+  return Retailer;
+};

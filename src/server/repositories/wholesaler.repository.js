@@ -1,7 +1,9 @@
-const { Wholesaler, Retailer } = require('../../db/config/db.config');
+const db = require('../models');
+const { Wholesaler, Retailer, Stock, sequelize } = db;  // Import missing models and sequelize instance
 
 class WholesalerRepository {
     async createWholesaler(wholesalerData) {
+        console.log("before creating in db wholesale", wholesalerData);
         return await Wholesaler.create(wholesalerData);
     }
 
@@ -9,7 +11,7 @@ class WholesalerRepository {
         return await Wholesaler.findByPk(wholesalerId, {
             include: [{
                 model: Retailer,
-                as: 'Retailers'
+                as: 'Retailers'  // Assuming `Retailer` model is related with 'Retailers' alias in Wholesaler model
             }]
         });
     }
@@ -18,11 +20,11 @@ class WholesalerRepository {
         return await Wholesaler.findAll({
             attributes: [
                 'id', 'name',
-                [sequelize.fn('sum', sequelize.col('Stock.amount')), 'totalTurnover']
+                [sequelize.fn('sum', sequelize.col('Stocks.amount')), 'totalTurnover']  // Fix column reference
             ],
             include: [{
                 model: Stock,
-                as: 'Stocks'
+                as: 'Stocks'  // Assuming `Stock` model is related with 'Stocks' alias in Wholesaler model
             }],
             group: ['Wholesaler.id']
         });
@@ -32,11 +34,11 @@ class WholesalerRepository {
         return await Wholesaler.findAll({
             attributes: [
                 'id', 'name',
-                [sequelize.fn('max', sequelize.col('Stock.amount')), 'maxTurnover']
+                [sequelize.fn('max', sequelize.col('Stocks.amount')), 'maxTurnover']  // Fix column reference
             ],
             include: [{
                 model: Stock,
-                as: 'Stocks'
+                as: 'Stocks'  // Assuming `Stock` model is related with 'Stocks' alias in Wholesaler model
             }],
             group: ['Wholesaler.id']
         });

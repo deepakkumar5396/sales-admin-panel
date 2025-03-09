@@ -1,52 +1,54 @@
+'use strict';
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('stocks', {
+    await queryInterface.createTable('Stocks', {
       id: {
-        type: Sequelize.UUID,
+        allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4, // Correct defaultValue for UUID
-        allowNull: false,
-      },
-      retailer_id: {
-        type: Sequelize.UUID,
-        references: {
-          model: 'retailers',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
-        allowNull: false,
+        type: Sequelize.INTEGER
       },
       wholesaler_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
-          model: 'wholesalers',
-          key: 'id',
+          model: 'Wholesalers',
+          key: 'id'
         },
         onDelete: 'CASCADE',
-        allowNull: false,
+        allowNull: false
+      },
+      retailer_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Retailers',
+          key: 'id'
+        },
+        onDelete: 'CASCADE',
+        allowNull: false
       },
       stock_amount: {
         type: Sequelize.FLOAT,
-        allowNull: false,
+        allowNull: false
       },
       date: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: false
       },
       createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW, // Ensure default value is set
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       updatedAt: {
-        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW, // Ensure default value is set
-      },
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+      }
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('stocks');
-  },
+    await queryInterface.dropTable('Stocks');
+  }
 };

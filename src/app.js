@@ -1,12 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
+const routes = require('./server/routes');  // Import the routes folder
 const db = require('./server/models');
-
-// Import Routes
-const retailerRoutes = require('./server/routes/retailer.routes');
-const wholesalerRoutes = require('./server/routes/wholesaler.routes');
-const stockRoutes = require('./server/routes/stock.routes');
 
 // Initialize dotenv
 dotenv.config();
@@ -21,16 +17,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Sync database
 db.sequelize.sync({ force: false })  // `force: false` to avoid dropping tables
   .then(() => {
-    console.log('Database connected successfully');
+    console.log('✅ Database connected successfully');
   })
   .catch((err) => {
-    console.error('Error:', err);
+    console.error('❌ Error:', err);
   });
 
-// Routes
-app.use('/api/retailers', retailerRoutes);
-app.use('/api/wholesalers', wholesalerRoutes);
-app.use('/api/stock', stockRoutes);
+// Use Routes
+app.use('/api', routes);
 
 // Default Route
 app.get('/', (req, res) => {

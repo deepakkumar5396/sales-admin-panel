@@ -3,6 +3,7 @@ const wholesalerService = require('../services/wholesaler.service');
 class WholesalerController {
     async createWholesaler(req, res, next) {
         try {
+            console.log(req.body);
             const wholesalerData = req.body;
             const wholesaler = await wholesalerService.createWholesaler(wholesalerData);
             res.status(201).json(wholesaler);

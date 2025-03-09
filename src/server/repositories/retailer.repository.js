@@ -1,4 +1,5 @@
-const { Retailer } = require('../../db/config/db.config');
+const db = require('../models');
+const { Wholesaler, Retailer, Stock, sequelize } = db; 
 
 class RetailerRepository {
     async createRetailer(retailerData) {
