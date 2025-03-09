@@ -2,10 +2,12 @@ const { Model, DataTypes } = require("sequelize");
 
 class Wholesaler extends Model {
   static associate(models) {
+    // Define the many-to-many relationship with Retailer using the 'retailers' alias
     this.belongsToMany(models.Retailer, {
       through: models.Stock,
       foreignKey: "wholesaler_id",
       otherKey: "retailer_id",
+      as: "retailers"  // Alias must match the alias in the Retailer model
     });
   }
 }
@@ -21,7 +23,7 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-      }
+      },
     },
     {
       sequelize,

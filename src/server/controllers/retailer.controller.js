@@ -30,6 +30,17 @@ class RetailerController {
         }
     }
 
+    // API 2: Get retailer by wholesaler_id
+    async getRetailerByWholesaler(req, res, next) {
+        try {
+            const { wholesaler_id } = req.params;
+            const retailer = await retailerService.getRetailerByWholesaler(wholesaler_id);
+            res.status(200).json(retailer);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async updateRetailer(req, res, next) {
         try {
             const { retailer_id } = req.params;

@@ -1,24 +1,69 @@
 const retailerRepository = require('../repositories/retailer.repository');
 
 class RetailerService {
+    // API 2: Get a retailer associated with a single wholesaler
+    async getRetailerByWholesaler(wholesalerId) {
+        try {
+            // Fetch retailer associated with the given wholesalerId
+            const retailer = await retailerRepository.findRetailerByWholesaler(wholesalerId);
+            
+            if (!retailer) {
+                throw new Error('Retailer not found for the given wholesaler');
+            }
+            
+            return retailer;
+        } catch (error) {
+            throw new Error(`Error fetching retailer: ${error.message}`);
+        }
+    }
+
+    // Other service methods if required (e.g. creating, updating, or deleting retailers)
     async createRetailer(retailerData) {
-        return await retailerRepository.createRetailer(retailerData);
+        try {
+            const retailer = await retailerRepository.createRetailer(retailerData);
+            return retailer;
+        } catch (error) {
+            throw new Error(`Error creating retailer: ${error.message}`);
+        }
     }
 
     async getAllRetailers() {
-        return await retailerRepository.getAllRetailers();
+        try {
+            const retailers = await retailerRepository.getAllRetailers();
+            return retailers;
+        } catch (error) {
+            throw new Error(`Error fetching all retailers: ${error.message}`);
+        }
     }
 
     async getRetailerById(retailerId) {
-        return await retailerRepository.getRetailerById(retailerId);
+        try {
+            const retailer = await retailerRepository.getRetailerById(retailerId);
+            if (!retailer) {
+                throw new Error('Retailer not found');
+            }
+            return retailer;
+        } catch (error) {
+            throw new Error(`Error fetching retailer: ${error.message}`);
+        }
     }
 
     async updateRetailer(retailerId, retailerData) {
-        return await retailerRepository.updateRetailer(retailerId, retailerData);
+        try {
+            const updatedRetailer = await retailerRepository.updateRetailer(retailerId, retailerData);
+            return updatedRetailer;
+        } catch (error) {
+            throw new Error(`Error updating retailer: ${error.message}`);
+        }
     }
 
     async deleteRetailer(retailerId) {
-        return await retailerRepository.deleteRetailer(retailerId);
+        try {
+            await retailerRepository.deleteRetailer(retailerId);
+            return { message: 'Retailer deleted successfully' };
+        } catch (error) {
+            throw new Error(`Error deleting retailer: ${error.message}`);
+        }
     }
 }
 

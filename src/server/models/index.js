@@ -8,6 +8,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../../db/config/config.json')[env];
 const db = {};
 
+// Initialize Sequelize connection
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
@@ -15,29 +16,27 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-// Import all models from the current folder (dynamically)
+// Import all models from the current directory (excluding index.js)
 fs
   .readdirSync(__dirname)
-  .filter(file => {
+  .filter((file) => {
     return (
-      file.indexOf('.') !== 0 && 
-      file !== basename && 
-      file.slice(-3) === '.js'
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
     );
   })
-  .forEach(file => {
+  .forEach((file) => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
   });
 
-// Setup associations (if exists)
-Object.keys(db).forEach(modelName => {
+// Setup associations (if defined in the models)
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
 
-// Export database connection and models
+// Export Sequelize connection and models
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
