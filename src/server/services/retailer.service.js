@@ -1,10 +1,8 @@
 const retailerRepository = require('../repositories/retailer.repository');
 
 class RetailerService {
-    // API 2: Get a retailer associated with a single wholesaler
     async getRetailerByWholesaler(wholesalerId) {
         try {
-            // Fetch retailer associated with the given wholesalerId
             const retailer = await retailerRepository.findRetailerByWholesaler(wholesalerId);
             
             if (!retailer) {
@@ -17,7 +15,6 @@ class RetailerService {
         }
     }
 
-    // Other service methods if required (e.g. creating, updating, or deleting retailers)
     async createRetailer(retailerData) {
         try {
             const retailer = await retailerRepository.createRetailer(retailerData);

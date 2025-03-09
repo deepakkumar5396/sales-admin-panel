@@ -7,7 +7,7 @@ class Wholesaler extends Model {
       through: models.Stock,
       foreignKey: "wholesaler_id",
       otherKey: "retailer_id",
-      as: "retailers"  // Alias must match the alias in the Retailer model
+      as: "retailers"
     });
   }
 }

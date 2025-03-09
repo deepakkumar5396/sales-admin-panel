@@ -1,29 +1,40 @@
+'use strict';
+
+const { faker } = require('@faker-js/faker');
+
 module.exports = {
-    up: async (queryInterface, Sequelize) => {
-      await queryInterface.bulkInsert('stocks', [
-        {
-          id: Sequelize.UUIDV4(),
-          retailer_id: 'uuid-for-retailer-one', // Replace with actual retailer UUID
-          wholesaler_id: 'uuid-for-wholesaler-one', // Replace with actual wholesaler UUID
-          stock_amount: 500.0,
-          date: new Date('2021-01-15'),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: Sequelize.UUIDV4(),
-          retailer_id: 'uuid-for-retailer-two', // Replace with actual retailer UUID
-          wholesaler_id: 'uuid-for-wholesaler-two', // Replace with actual wholesaler UUID
-          stock_amount: 300.0,
-          date: new Date('2021-02-18'),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ]);
-    },
-  
-    down: async (queryInterface, Sequelize) => {
-      await queryInterface.bulkDelete('stocks', null, {});
-    },
-  };
-  
+  async up(queryInterface, Sequelize) {
+    const retailers = await queryInterface.sequelize.query(
+      `SELECT id from "Retailers";`
+    );
+    const wholesalers = await queryInterface.sequelize.query(
+      `SELECT id from "Wholesalers";`
+    );
+
+    const retailerIds = retailers[0].map(retailer => retailer.id);
+    const wholesalerIds = wholesalers[0].map(wholesaler => wholesaler.id);
+    if (retailerIds.length === 0 || wholesalerIds.length === 0) {
+      console.log("No retailers or wholesalers found. Skipping stock seeder.");
+      return;
+    }
+    const stockData = [];
+    for (let i = 0; i < 50; i++) {
+      const randomWholesalerId = wholesalerIds[Math.floor(Math.random() * wholesalerIds.length)];
+      const randomRetailerId = retailerIds[Math.floor(Math.random() * retailerIds.length)];
+      stockData.push({
+        wholesaler_id: randomWholesalerId,
+        retailer_id: randomRetailerId,
+        stock_amount: faker.number.float({ min: 1000, max: 100000 }),
+        date: faker.date.recent(),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+    }
+    await queryInterface.bulkInsert('Stocks', stockData);
+    console.log("✅ Successfully inserted stock data.");
+  },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('Stocks', null, {});
+  }
+};

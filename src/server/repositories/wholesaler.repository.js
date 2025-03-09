@@ -1,13 +1,8 @@
-const db = require("../models"); // Assuming you're using Sequelize or another ORM
+const db = require("../models");
 
 class WholesalerRepository {
-  // Calculate total monthly turnover (based on stock amounts)
   async calculateMonthlyTurnover() {
     try {
-      // Log to make sure the logic here is working fine
-      console.log("Calculating monthly turnover...");
-
-      // Assuming 'stock_amount' represents the value of the turnover in your schema
       const turnover = await db.Stock.sum("stock_amount", {
         where: {
           createdAt: {
@@ -20,7 +15,7 @@ class WholesalerRepository {
         },
       });
 
-      console.log("Turnover calculated:", turnover); // Log result
+      console.log("Turnover calculated:", turnover);
       return turnover;
     } catch (error) {
       console.error("Error calculating monthly turnover:", error.message);
@@ -28,16 +23,50 @@ class WholesalerRepository {
     }
   }
 
+async getRetailersWithSingleWholesaler() {
+  try {
+    console.log("Fetching retailers with exactly one...");
+
+    const retailers = await db.Retailer.findAll({
+      attributes: [
+        'id',
+        'name',
+        'email',
+        'wholesalerId',
+        [db.Sequelize.fn('COUNT', db.Sequelize.col('wholesalerId')), 'wholesaler_count']
+      ],
+      include: [
+        {
+          model: db.Wholesaler,
+          as: 'wholesaler',
+          attributes: []
+        }
+      ],
+      group: ['Retailer.id'],
+      having: db.Sequelize.literal('COUNT(wholesalerId) = 1')
+    });
+
+    return retailers;
+  } catch (error) {
+    console.error('Error fetching retailers with single wholesaler:', error.message);
+    throw new Error(`Error fetching retailers with single wholesaler: ${error.message}`);
+  }
+}
+
+  
   // Get max turnover from a single retailer for each wholesaler
   async getMaxTurnover() {
     try {
-      // Assuming 'stock_amount' represents turnover in your schema
+      console.log("Fetching max turnover...");
       const maxTurnover = await db.Stock.findAll({
         attributes: [
-          "wholesalerId",
-          [db.Sequelize.fn("MAX", db.Sequelize.col("stock_amount")), "maxTurnover"],
+          "wholesaler_id",
+          [
+            db.Sequelize.fn("MAX", db.Sequelize.col("stock_amount")),
+            "maxTurnover",
+          ],
         ],
-        group: ["wholesalerId"],
+        group: ["wholesaler_id"],
       });
       return maxTurnover;
     } catch (error) {
@@ -45,7 +74,6 @@ class WholesalerRepository {
     }
   }
 
-  // Create a new wholesaler
   async createWholesaler(wholesalerData) {
     try {
       const wholesaler = await db.Wholesaler.create(wholesalerData);
@@ -55,7 +83,6 @@ class WholesalerRepository {
     }
   }
 
-  // Get all wholesalers
   async getAllWholesalers() {
     try {
       const wholesalers = await db.Wholesaler.findAll();
@@ -73,7 +100,8 @@ class WholesalerRepository {
         include: [
           {
             model: db.Retailer,
-            as: "retailers", // Ensure the alias matches what you defined in the model
+            as: "retailers",
+            attributes: ["id", "name", "mobile_number"],
           },
         ],
       });
@@ -84,8 +112,6 @@ class WholesalerRepository {
       );
     }
   }
-
-  // Update wholesaler by ID
   async updateWholesaler(wholesalerId, wholesalerData) {
     try {
       const [updated] = await db.Wholesaler.update(wholesalerData, {
@@ -102,8 +128,6 @@ class WholesalerRepository {
       throw new Error(`Error updating wholesaler: ${error.message}`);
     }
   }
-
-  // Delete wholesaler by ID
   async deleteWholesaler(wholesalerId) {
     try {
       const deleted = await db.Wholesaler.destroy({

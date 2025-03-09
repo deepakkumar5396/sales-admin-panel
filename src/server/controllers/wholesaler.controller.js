@@ -35,13 +35,9 @@ class WholesalerController {
     }
   }
 
-  // API 3: Get total monthly turnover
   // Controller Function to get Monthly Turnover
   async getMonthlyTurnover(req, res, next) {
     try {
-      // Log the request params or body to check if something unexpected is being passed
-      console.log(req.params); // or console.log(req.body); depending on how the request is structured
-
       const turnover = await wholesalerService.getMonthlyTurnover();
       res.status(200).json(turnover);
     } catch (error) {
@@ -50,9 +46,21 @@ class WholesalerController {
     }
   }
 
+  async getRetailersWithSingleWholesaler(req, res, next) {
+    try {
+      console.log("Received request to get retailers with a single wholesaler");
+      const retailers = await wholesalerService.getRetailersWithSingleWholesaler();
+      res.status(200).json(retailers);
+    } catch (error) {
+      next(error);
+    }
+  }
+  
+
   // API 4: Get max turnover from a single retailer for each wholesaler
   async getMaxTurnover(req, res, next) {
     try {
+      console.log("Received request to get max turnover");
       const maxTurnover = await wholesalerService.getMaxTurnover();
       res.status(200).json(maxTurnover);
     } catch (error) {

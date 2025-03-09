@@ -1,18 +1,15 @@
-const db = require('../models'); // Assuming you're using Sequelize or any other ORM for your database connection.
-
+const db = require('../models');
 class RetailerRepository {
-    // Find retailer by wholesalerId (API 2)
     async findRetailerByWholesaler(wholesalerId) {
         try {
-            // Assuming a Retailer model with a 'wholesalerId' field
             const retailer = await db.Retailer.findOne({
                 where: {
-                    wholesalerId: wholesalerId, // Adjust based on your database schema
+                    wholesalerId: wholesalerId,
                 }
             });
             
             if (!retailer) {
-                return null; // If no retailer is found
+                return null;
             }
 
             return retailer;

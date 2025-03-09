@@ -1,24 +1,20 @@
+'use strict';
+
+const { faker } = require('@faker-js/faker');
+
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('wholesalers', [
-      {
-        id: Sequelize.UUIDV4(),
-        name: 'Wholesaler One',
-        mobile_number: '1234567890',
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert('Wholesalers', 
+      Array.from({ length: 10 }).map(() => ({
+        name: faker.person.fullName(),
+        mobile_number: faker.phone.number(),
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: Sequelize.UUIDV4(),
-        name: 'Wholesaler Two',
-        mobile_number: '0987654321',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ]);
+        updatedAt: new Date()
+      }))
+    );
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('wholesalers', null, {});
-  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('Wholesalers', null, {});
+  }
 };

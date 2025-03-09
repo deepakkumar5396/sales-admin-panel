@@ -1,7 +1,6 @@
-const app = require('./app');  // Import the app instance
+const app = require('./app');  
 
-const PORT = process.env.PORT || 3000;  // Default port to 3000
-
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

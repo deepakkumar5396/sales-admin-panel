@@ -2,16 +2,14 @@ const { Model, DataTypes } = require("sequelize");
 
 class Stock extends Model {
   static associate(models) {
-    // Stock belongs to Wholesaler
     this.belongsTo(models.Wholesaler, {
       foreignKey: "wholesaler_id",
-      as: "wholesaler",  // Alias for wholesaler
+      as: "wholesaler",
     });
 
-    // Stock belongs to Retailer
     this.belongsTo(models.Retailer, {
       foreignKey: "retailer_id",
-      as: "retailer",  // Alias for retailer
+      as: "retailer",
     });
   }
 }

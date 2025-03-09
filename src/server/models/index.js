@@ -35,8 +35,6 @@ Object.keys(db).forEach((modelName) => {
     db[modelName].associate(db);
   }
 });
-
-// Export Sequelize connection and models
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

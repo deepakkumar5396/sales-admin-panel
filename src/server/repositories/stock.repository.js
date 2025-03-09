@@ -1,4 +1,4 @@
-const db = require('../models'); // Assuming you're using an ORM like Sequelize for DB operations.
+const db = require('../models');
 
 class StockRepository {
     // Create a new stock entry

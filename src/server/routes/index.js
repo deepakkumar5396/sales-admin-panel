@@ -5,7 +5,6 @@ const stockRoutes = require('./stock.routes');
 
 const router = express.Router();
 
-// Combine all routes here
 router.use('/wholesalers', wholesalerRoutes);
 router.use('/retailers', retailerRoutes);
 router.use('/stocks', stockRoutes);
