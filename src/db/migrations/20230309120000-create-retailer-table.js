@@ -1,33 +1,35 @@
-'use strict';
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('wholesalers', {
+    await queryInterface.createTable('retailers', {
       id: {
         type: Sequelize.UUID,
-        allowNull: false,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV4, // Correct defaultValue for UUID
+        allowNull: false,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      // Add other fields as required
+      mobile_number: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.NOW, // Ensure default value is set
       },
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.NOW, // Ensure default value is set
       },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('wholesalers');
+    await queryInterface.dropTable('retailers');
   },
 };

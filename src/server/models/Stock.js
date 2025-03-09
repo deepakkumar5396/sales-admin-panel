@@ -16,7 +16,8 @@ class Stock extends Model {
       price: DataTypes.FLOAT,
     }, {
       sequelize,
-      modelName: 'Stock'
+      modelName: 'Stock',
+      
     });
   }
 }

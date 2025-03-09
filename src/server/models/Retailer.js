@@ -13,7 +13,8 @@ class Retailer extends Model {
       email: DataTypes.STRING,
     }, {
       sequelize, // <-- Pass Sequelize instance here
-      modelName: 'Retailer'
+      modelName: 'Retailer',
+      timestamps: true,
     });
   }
 }

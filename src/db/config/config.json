@@ -2,19 +2,19 @@
   "development": {
     "username": "postgres",
     "password": "password",
-    "database": "wholesaler",
+    "database": "Sales-Admin",
     "host": "localhost",
     "dialect": "postgres",
     "migrationStorageTableName": "sequelize_meta",
     "migrations": ["src/db/migrations/*.js"],
     "seeders": ["src/db/seeders/*.js"],
     "models": ["src/models/*.js"],
-    "logging": false 
+    "logging": false
   },
   "test": {
     "username": "postgres",
     "password": "password",
-    "database": "wholesaler_test",
+    "database": "Sales-Admin_test",
     "host": "localhost",
     "dialect": "postgres",
     "migrationStorageTableName": "sequelize_meta",
@@ -26,7 +26,7 @@
   "production": {
     "username": "postgres",
     "password": "password",
-    "database": "wholesaler",
+    "database": "Sales-Admin",
     "host": "localhost",
     "dialect": "postgres",
     "migrationStorageTableName": "sequelize_meta",
