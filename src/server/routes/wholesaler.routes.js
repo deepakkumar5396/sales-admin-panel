@@ -3,6 +3,7 @@ const WholesalerController = require('../controllers/wholesaler.controller');
 
 const router = express.Router();
 router.get('/monthly_turnover/', WholesalerController.getMonthlyTurnover);
+// router.get('/monthly_turnover/:wholesaler_id', WholesalerController.getMonthlyTurnovereach);
 router.get('/retailers/single_wholesaler', WholesalerController.getRetailersWithSingleWholesaler);
 router.get('/max_turnover/', WholesalerController.getMaxTurnover);
 router.get('/:wholesaler_id', WholesalerController.getWholesalerWithRetailers);

@@ -3,16 +3,24 @@ const db = require("../models");
 class WholesalerRepository {
   async calculateMonthlyTurnover() {
     try {
-      const turnover = await db.Stock.sum("stock_amount", {
+      const turnover = await db.Stock.findAll({
+        attributes: [
+          "wholesaler_id",
+          [
+            db.Sequelize.fn("SUM", db.Sequelize.col("stock_amount")),
+            "stock_amount",
+          ],
+        ],
         where: {
           createdAt: {
             [db.Sequelize.Op.gte]: new Date(
               new Date().getFullYear(),
-              new Date().getMonth(),
-              1
+              new Date().getMonth()
             ),
           },
         },
+        group: ["wholesaler_id"],
+        raw: true, // Ensures output is a plain JSON array
       });
 
       console.log("Turnover calculated:", turnover);
@@ -23,37 +31,44 @@ class WholesalerRepository {
     }
   }
 
-async getRetailersWithSingleWholesaler() {
-  try {
-    console.log("Fetching retailers with exactly one...");
+  async getRetailersWithSingleWholesaler() {
+    try {
+      console.log("Fetching retailers with exactly one...");
 
-    const retailers = await db.Retailer.findAll({
-      attributes: [
-        'id',
-        'name',
-        'email',
-        'wholesalerId',
-        [db.Sequelize.fn('COUNT', db.Sequelize.col('wholesalerId')), 'wholesaler_count']
-      ],
-      include: [
-        {
-          model: db.Wholesaler,
-          as: 'wholesaler',
-          attributes: []
-        }
-      ],
-      group: ['Retailer.id'],
-      having: db.Sequelize.literal('COUNT(wholesalerId) = 1')
-    });
+      const retailers = await db.Retailer.findAll({
+        attributes: [
+          "id",
+          "name",
+          "email",
+          "wholesalerId",
+          [
+            db.Sequelize.fn("COUNT", db.Sequelize.col("wholesalerId")),
+            "wholesaler_count",
+          ],
+        ],
+        include: [
+          {
+            model: db.Wholesaler,
+            as: "wholesaler",
+            attributes: [],
+          },
+        ],
+        group: ["Retailer.id"],
+        having: db.Sequelize.literal("COUNT(wholesalerId) = 1"),
+      });
 
-    return retailers;
-  } catch (error) {
-    console.error('Error fetching retailers with single wholesaler:', error.message);
-    throw new Error(`Error fetching retailers with single wholesaler: ${error.message}`);
+      return retailers;
+    } catch (error) {
+      console.error(
+        "Error fetching retailers with single wholesaler:",
+        error.message
+      );
+      throw new Error(
+        `Error fetching retailers with single wholesaler: ${error.message}`
+      );
+    }
   }
-}
 
-  
   // Get max turnover from a single retailer for each wholesaler
   async getMaxTurnover() {
     try {

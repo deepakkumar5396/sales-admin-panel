@@ -4,7 +4,7 @@ class Stock extends Model {
   static associate(models) {
     this.belongsTo(models.Wholesaler, {
       foreignKey: "wholesaler_id",
-      as: "wholesaler",
+      as: "wholesalers",
     });
 
     this.belongsTo(models.Retailer, {
